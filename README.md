@@ -1,0 +1,2 @@
+# astrbot_plugin_self_manager
+让Astrbot可以龙虾一样更改自身各种配置，实现自管理的插件
