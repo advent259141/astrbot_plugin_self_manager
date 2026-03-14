@@ -22,6 +22,13 @@
 | | `switch_provider` | 切换当前会话的 LLM 提供商 🔒 |
 | 🔧 工具 | `list_llm_tools` | 列出已注册的 function-calling 工具 🔒 |
 | | `toggle_llm_tool` | 启用/禁用工具 🔒 |
+| 🌐 MCP | `list_mcp_servers` | 列出 MCP 服务名称和运行状态概览 🔒 |
+| | `get_mcp_server` | 查看指定 MCP 服务的详细配置、工具列表和错误日志 🔒 |
+| | `add_mcp_server` | 添加新 MCP 服务（传入 JSON 配置，支持 SSE/Streamable HTTP/Stdio）🔒 |
+| | `remove_mcp_server` | 删除 MCP 服务（自动断开并移除配置）🔒 |
+| | `toggle_mcp_server` | 启用/禁用 MCP 服务 🔒 |
+| 📝 指令 | `list_commands` | 列出所有已注册指令 🔒 |
+| | `toggle_command` | 启用/禁用指令 🔒 |
 | 💬 对话 | `list_conversations` | 列出对话记录 🔒 |
 | | `clear_conversation` | 清除记忆（新建对话）🔒 |
 | | `switch_conversation` | 切换对话 🔒 |
@@ -31,7 +38,8 @@
 | | `switch_persona` | 切换当前对话的人格 🔒 |
 | 📨 消息 | `send_message` | 主动向指定会话发消息 🔒 |
 | ⚙️ 配置 | `get_config` | 读取系统配置 🔒 |
-| | `set_config` | 修改系统配置（热保存，立即持久化）🔒 |
+| | `search_config` | 搜索配置项（模糊匹配 key 路径）🔒 |
+| | `set_config` | 批量修改系统配置（Diff 式，支持一次设置多项）🔒 |
 | 📊 状态 | `get_system_status` | 查看系统运行状态概览 🔒 |
 
 > 🔒 所有工具均仅管理员可用。
@@ -50,12 +58,15 @@ data/plugins/astrbot_plugin_self_manager/
     ├── skill_tools.py
     ├── provider_tools.py
     ├── llm_tool_tools.py
+    ├── mcp_tools.py
+    ├── command_tools.py
     ├── conversation_tools.py
     ├── persona_tools.py
     ├── session_tools.py
     ├── config_tools.py
     └── status_tools.py
 ```
+
 
 ## 💬 使用示例
 
@@ -77,13 +88,20 @@ data/plugins/astrbot_plugin_self_manager/
   → Agent 调用 `get_session_umo` + `clear_conversation`
 
 - **「切换到猫娘人格」**
-  → Agent 调用 `switch_conversation_persona`
+  → Agent 调用 `switch_persona`
 
 - **「把唤醒前缀改成 !」**
-  → Agent 调用 `get_config` 查看配置路径 + `set_config` 修改
+  → Agent 调用 `search_config` 找到 key + `set_config` 批量修改
 
 - **「查看系统状态」**
   → Agent 调用 `get_system_status`
+
+- **「MCP 服务都有哪些？」**
+  → Agent 调用 `list_mcp_servers`
+
+- **「把 /help 指令关掉」**
+  → Agent 调用 `list_commands` + `toggle_command`
+
 
 ## 🔒 安全设计
 

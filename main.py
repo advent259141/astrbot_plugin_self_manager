@@ -3,7 +3,8 @@
 from astrbot.api import logger
 from astrbot.api.star import Context, Star
 
-from .tools.config_tools import GetConfigTool, SetConfigTool
+from .tools.command_tools import ListCommandsTool, ToggleCommandTool
+from .tools.config_tools import GetConfigTool, SearchConfigTool, SetConfigTool
 from .tools.conversation_tools import (
     ClearConversationTool,
     DeleteConversationTool,
@@ -11,6 +12,7 @@ from .tools.conversation_tools import (
     SwitchConversationTool,
 )
 from .tools.llm_tool_tools import ListLLMToolsTool, ToggleLLMToolTool
+from .tools.mcp_tools import AddMCPServerTool, GetMCPServerTool, ListMCPServersTool, RemoveMCPServerTool, ToggleMCPServerTool
 from .tools.persona_tools import (
     GetCurrentPersonaTool,
     ListPersonasTool,
@@ -42,16 +44,18 @@ from .tools.status_tools import GetSystemStatusTool
 class SelfManagerPlugin(Star):
     """让 Agent 拥有自我管理能力的插件。
 
-    注册 27 个 FunctionTool，涵盖：
+    注册 35 个 FunctionTool，涵盖：
     - 插件管理（安装/卸载/启停/更新/重载/列出）
     - Skill 管理（列出/启停/删除/安装）
     - 模型提供商管理（列出/查看当前/切换）
     - LLM 工具管理（列出/启停）
+    - MCP 服务管理（列出/详情/添加/删除/启停）
+    - 指令管理（列出/启停）
     - 对话管理（列出/清除/切换/删除）
     - 人格管理（列出/查看当前/切换当前对话人格）
     - 会话信息（获取 UMO）
     - 主动发消息
-    - 系统配置读写
+    - 系统配置（读取/搜索/批量修改）
     - 系统状态查看
     """
 
@@ -81,6 +85,15 @@ class SelfManagerPlugin(Star):
             # ── LLM 工具 ──
             ListLLMToolsTool(_ctx=context),
             ToggleLLMToolTool(_ctx=context),
+            # ── MCP 服务 ──
+            ListMCPServersTool(_ctx=context),
+            GetMCPServerTool(_ctx=context),
+            AddMCPServerTool(_ctx=context),
+            RemoveMCPServerTool(_ctx=context),
+            ToggleMCPServerTool(_ctx=context),
+            # ── 指令管理 ──
+            ListCommandsTool(),
+            ToggleCommandTool(),
             # ── 对话管理 ──
             ListConversationsTool(_ctx=context),
             ClearConversationTool(_ctx=context),
@@ -94,12 +107,13 @@ class SelfManagerPlugin(Star):
             SendMessageTool(_ctx=context),
             # ── 系统配置 ──
             GetConfigTool(_ctx=context),
+            SearchConfigTool(_ctx=context),
             SetConfigTool(_ctx=context),
             # ── 系统状态 ──
             GetSystemStatusTool(_ctx=context),
         )
 
-        logger.info("✨ 自管理插件已加载，共注册 27 个 FunctionTool。")
+        logger.info("✨ 自管理插件已加载，共注册 35 个 FunctionTool。")
 
     async def terminate(self):
         """插件被卸载/停用时调用。"""

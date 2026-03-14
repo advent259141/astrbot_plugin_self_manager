@@ -1,6 +1,6 @@
 name: astrbot_plugin_self_manager
 desc: 让 Agent 拥有自我管理能力 —— 安装/卸载/启停插件、管理 Skill、切换模型、控制工具、管理对话、查看人格、读写配置等。
-version: 1.0.0
-author: Jason.Joestar
-repo: "https://github.com/advent259141/astrbot_plugin_self_manager"
+version: 0.1.0
+author: AstrBot
+repo: ""
 display_name: Agent 自管理
